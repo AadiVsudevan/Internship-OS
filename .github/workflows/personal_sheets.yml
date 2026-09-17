@@ -1,0 +1,47 @@
+name: Personal Opportunity OS
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'config/**'
+      - 'tests/**'
+      - 'run_personal.py'
+      - 'requirements*.txt'
+      - '.github/workflows/personal_sheets.yml'
+  schedule:
+    - cron: '47 0 * * *'
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Use bootstrap for the first run; doctor checks access and schema'
+        default: bootstrap
+        type: choice
+        options: [bootstrap, setup, sync, doctor]
+permissions:
+  contents: read
+concurrency:
+  group: opportunity-os-sheets
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-sheets.txt
+      - run: pip install -r requirements.txt -r requirements-sheets.txt
+      - name: Verify regression tests before writing the Sheet
+        run: python -m pytest -q
+      - name: Refresh opportunities, preparation packs and weekly queue
+        env:
+          GOOGLE_SHEET_ID: ${{ vars.GOOGLE_SHEET_ID || secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          OS_COMMAND: ${{ inputs.command || (github.event_name == 'push' && 'bootstrap') || 'sync' }}
+        run: python run_personal.py "$OS_COMMAND"

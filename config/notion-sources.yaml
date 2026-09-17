@@ -1,0 +1,83 @@
+# =============================================================================
+# SOURCES.YAML — the only file you should need to touch after initial setup.
+# Add/remove/disable sources here. No code changes needed.
+#
+# Three source "types" are supported by src/ingest/:
+#   rss          -> any URL that returns an RSS/Atom feed (rss.py)
+#   scrape       -> a listing page without RSS, scraped via CSS selectors (scrape.py)
+#   github_list  -> a markdown file in a GitHub repo (e.g. an "Awesome Internships"
+#                   list), diffed line-by-line for new entries (github_lists.py)
+#
+# enabled: false lets you pause a noisy/dead source without deleting your tuning.
+# tags: feed into focus_match scoring in src/rank.py — keep them consistent.
+# =============================================================================
+
+rss:
+  # --- Google Alerts (set these up yourself, 5 min, see README Step 2) ---
+  # Go to google.com/alerts -> create alert -> click the settings gear ->
+  # "Deliver to: RSS feed" -> copy the feed URL it gives you -> paste below.
+  - name: "Google Alert - finance internship India"
+    url: "PASTE_YOUR_GOOGLE_ALERT_RSS_URL_HERE"
+    tags: [finance, india, internship]
+    enabled: false   # flip to true once you've created the alert
+
+  - name: "Google Alert - economics research fellowship"
+    url: "PASTE_YOUR_GOOGLE_ALERT_RSS_URL_HERE"
+    tags: [research, fellowship, economics]
+    enabled: false
+
+  - name: "Google Alert - CFA scholarship competition"
+    url: "PASTE_YOUR_GOOGLE_ALERT_RSS_URL_HERE"
+    tags: [finance, competition, cfa]
+    enabled: false
+
+  # --- Direct RSS feeds (verify URL still resolves on setup, sites change) ---
+  - name: "Devpost hackathons (competitions feed)"
+    url: "https://devpost.com/software/feed"
+    tags: [competition, tech]
+    enabled: true
+
+  # Most newsletters (Pallet, Term Sheet, Inc42, YourStory) let you forward
+  # emails to a Gmail filter + label. Phase 2 (see README scalability section)
+  # adds Gmail parsing. For now, most also publish a public RSS/Substack feed —
+  # find it via "site:substack.com [newsletter name]" and add it here.
+  - name: "EXAMPLE - Substack newsletter feed"
+    url: "https://example.substack.com/feed"
+    tags: [finance, india]
+    enabled: false
+
+scrape:
+  # Generic config-driven scraper. CSS selectors WILL need occasional updates
+  # when a site redesigns — that's the one recurring maintenance cost of this
+  # system (see README Maintenance Plan). Use browser DevTools > Inspect on
+  # the listing page to find/update selectors.
+  - name: "Internshala - finance internships"
+    url: "https://internshala.com/internships/finance-internship"
+    list_selector: "div.individual_internship"     # VERIFY: container per listing
+    title_selector: "h3.job-internship-name"        # VERIFY
+    link_selector: "a.job-title-href"                # VERIFY
+    link_attr: "href"
+    base_url: "https://internshala.com"
+    tags: [finance, india, internship]
+    enabled: true
+
+  - name: "LetsIntern - finance & research"
+    url: "https://www.letsintern.com/internship/finance-internship"
+    list_selector: "div.internship-card"             # VERIFY
+    title_selector: "h2"                             # VERIFY
+    link_selector: "a"                               # VERIFY
+    link_attr: "href"
+    base_url: "https://www.letsintern.com"
+    tags: [finance, india, internship]
+    enabled: true
+
+github_list:
+  # Point at any "Awesome X" markdown list. Search GitHub for things like
+  # "awesome internships", "summer 2027 internships list", "quant internships"
+  # and paste the repo + file path. The script diffs the raw file against the
+  # last-seen version and surfaces newly added lines.
+  - name: "EXAMPLE - awesome list"
+    repo: "OWNER/REPO"
+    path: "README.md"
+    tags: [tech, internship]
+    enabled: false

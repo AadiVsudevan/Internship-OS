@@ -1,0 +1,63 @@
+# --- Environment & secrets (NEVER commit these) ---
+.env
+.env.local
+.env.*.local
+
+# --- Python runtime ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+MANIFEST
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+.Python
+
+# --- Test & coverage ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+*.hypothesis/
+
+# --- Type checking ---
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# --- IDE / editor ---
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Project data files (auto-managed by bot, committed intentionally) ---
+# DO NOT add data/seen.json or data/github_snapshots/ here — the bot commits
+# them to persist dedupe state across GitHub Actions runs. They stay in git.
+
+# --- Logs ---
+logs/
+*.log
+
+# Generated previews can contain application text; keep them out of Git.
+outputs/
+service-account*.json
+credentials*.json

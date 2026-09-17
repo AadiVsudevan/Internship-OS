@@ -1,0 +1,39 @@
+name: Daily Opportunity Discovery
+
+on:
+  workflow_dispatch: {}     # lets you trigger manually from the Actions tab to test
+
+permissions:
+  contents: write   # needed to commit data/seen.json + data/github_snapshots/ back
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run discovery pipeline
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_OPPORTUNITIES_DB_ID: ${{ secrets.NOTION_OPPORTUNITIES_DB_ID }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL || 'llama-3.1-8b-instant' }}
+          USE_LLM_CLASSIFICATION: ${{ vars.USE_LLM_CLASSIFICATION || 'true' }}
+          MAX_NEW_PER_RUN: ${{ vars.MAX_NEW_PER_RUN || '40' }}
+        run: python main.py
+
+      - name: Commit updated dedupe state
+        run: |
+          git config user.name "opportunity-os-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          git diff --quiet --cached || git commit -m "chore: update dedupe state [skip ci]"
+          git push

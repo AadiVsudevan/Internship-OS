@@ -1,0 +1,24 @@
+{
+  "weekly_hours": 3,
+  "max_new_per_run": 30,
+  "stale_after_days": 14,
+  "timezone": "Asia/Kolkata",
+  "weights": {
+    "fit": 0.5,
+    "value": 0.2,
+    "urgency": 0.2,
+    "effort": 0.1
+  },
+  "effort_hours": {
+    "Internship": 2,
+    "Research": 3,
+    "Fellowship": 3,
+    "Scholarship": 3,
+    "Competition": 2,
+    "Conference": 1,
+    "Startup Program": 3,
+    "Leadership": 2,
+    "Exchange": 3,
+    "Other": 2
+  }
+}

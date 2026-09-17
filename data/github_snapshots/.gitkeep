@@ -1,0 +1,3 @@
+# This directory stores snapshots of GitHub markdown files for line-by-line diffing.
+# Files are auto-managed by src/ingest/github_lists.py — do not edit manually.
+# This .gitkeep file ensures the directory is tracked by git.

@@ -1,0 +1,26 @@
+name: Weekly Application Queue
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  weekly_queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate weekly queue
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_OPPORTUNITIES_DB_ID: ${{ secrets.NOTION_OPPORTUNITIES_DB_ID }}
+          NOTION_QUEUE_PAGE_ID: ${{ secrets.NOTION_QUEUE_PAGE_ID }}
+          WEEKLY_QUEUE_TARGET_HOURS: ${{ vars.WEEKLY_QUEUE_TARGET_HOURS || '3' }}
+        run: python -m src.weekly_queue
