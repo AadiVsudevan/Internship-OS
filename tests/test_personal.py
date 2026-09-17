@@ -300,3 +300,10 @@ def test_sheet_profile_loads_only_private_profile_keys(profile):
     loaded = load_config(sheet_profile(store))
     assert loaded["name"] == "Test Applicant" and loaded["interests"] == ["research"]
     assert loaded["weekly_hours"] == profile["weekly_hours"]
+
+
+@pytest.mark.parametrize("title", ["How to Write a Scholarship Essay", "30 Scholarship Opportunities Currently Open", "Postdoctoral Research Fellowship", "Masters Bursary", "Ph.D Visiting Fellowship"])
+def test_editorial_and_explicit_advanced_degrees_do_not_enter_student_queue(profile, title):
+    rows, _ = reconcile([candidate(title=title)], [], profile, NOW)
+    assert rows[0]["Next action"] == "No application action"
+    assert build_queues(rows, profile, date(2026, 9, 16)) == ([], [])

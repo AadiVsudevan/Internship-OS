@@ -119,6 +119,16 @@ def evaluate(record: dict, profile: dict, today: date) -> dict:
     record["Matched interests"] = ", ".join(matches)
     record["Ranking reason"] = f"Heuristic, not acceptance probability or financial ROI: fit={fit}; category value={value}; urgency={urgency}; effort={effort}. Weights={w}"
     blocked = availability in {"Deadline passed", "Closed by user"} or record.get("Eligibility") == "Ineligible" or status in TERMINAL
+    title = record["Title"].lower()
+    editorial = bool(re.search(r"^(how to|tips for|guide to|\d+ .{0,70}opportunities\s+currently)", title))
+    advanced_level = ("undergraduate" in profile.get("education", "").lower() and
+                      bool(re.search(r"postdoc|ph\.?d\b|doctorate|\bmasters?\b", title)))
+    # Keep source evidence and packs, but don't recommend an editorial article or
+    # an explicitly postgraduate programme to an undergraduate applicant.
+    if editorial or (advanced_level and record.get("Eligibility") != "Eligible"):
+        blocked = True
+        record["Ranking reason"] += "; Not queued: " + (
+            "editorial/roundup, not one application" if editorial else "title targets postgraduate study; confirm an exception before overriding")
     official_link = record.get("Verified application URL", "")
     try:
         if official_link:
