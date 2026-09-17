@@ -11,6 +11,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from src.personal_engine import AUTO_COLUMNS, PACK_COLUMNS, INBOX_COLUMNS, ACTIVITY_COLUMNS, build_queues, reconcile, identity
+from src.personal_views import ASSESSMENT_COLUMNS, assess, reviewed_records, snapshots
 from src.activity import transitions, hours_used
 from src.preparation import build_pack
 from src.sheets_store import SheetsClient, SheetsStore
@@ -77,7 +78,13 @@ def execute(store: SheetsStore, candidates: list[dict], health: list[dict], prof
         events = transitions(records, history, now)
         store.upsert("Application Activity", events, ACTIVITY_COLUMNS)
         spent = hours_used(history + events, datetime.fromisoformat(now).date())
-        ready, verify = build_queues(records, profile, datetime.fromisoformat(now).date(), spent)
+        assessments = [assess(r, profile) for r in records]
+        store.upsert("Personal Review", assessments, ASSESSMENT_COLUMNS)
+        reviews = store.load("Personal Review")
+        for title, rows in snapshots(assessments, reviews).items():
+            store.replace(title, rows)
+        queued = reviewed_records(records, assessments, reviews)
+        ready, verify = build_queues(queued, profile, datetime.fromisoformat(now).date(), spent)
         store.replace("Weekly Queue", ready)
         store.replace("Verify First", verify)
         store.replace("Source Health", health)

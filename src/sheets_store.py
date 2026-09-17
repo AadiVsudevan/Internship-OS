@@ -146,6 +146,11 @@ class SheetsStore:
                 {"repeatCell": {"range": {"sheetId": sid, "startRowIndex": 1}, "cell": {"userEnteredFormat": {"wrapStrategy": "CLIP", "verticalAlignment": "TOP"}}, "fields": "userEnteredFormat"}},
                 {"updateDimensionProperties": {"range": {"sheetId": sid, "dimension": "COLUMNS", "startIndex": 0, "endIndex": len(headers)}, "properties": {"pixelSize": 180}, "fields": "pixelSize"}},
                 {"setBasicFilter": {"filter": {"range": {"sheetId": sid, "startRowIndex": 0, "startColumnIndex": 0, "endColumnIndex": len(headers)}}}}]
+            if title == "Personal Review":
+                requests.append({"setDataValidation": {"range": {"sheetId": sid, "startRowIndex": 1,
+                    "startColumnIndex": 11, "endColumnIndex": 12}, "rule": {"condition": {"type": "ONE_OF_LIST",
+                    "values": [{"userEnteredValue": v} for v in ["Unreviewed", "Approve", "Hold", "Reject"]]},
+                    "strict": True, "showCustomUi": True}}})
             if title == "Application Packs":
                 requests.append({"updateDimensionProperties": {"range": {"sheetId": sid, "dimension": "COLUMNS", "startIndex": 2, "endIndex": 4}, "properties": {"pixelSize": 500}, "fields": "pixelSize"}})
             for col, options in ({18: ["New", "To Apply", "Drafting", "Applied", "Interview", "Offer", "Rejected", "Withdrawn", "Skip", "Closed"],

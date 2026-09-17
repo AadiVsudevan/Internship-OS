@@ -90,3 +90,13 @@ Run tests with `pip install -r requirements.txt -r requirements-sheets.txt` foll
 - [Google Sheets API quotas, atomic requests and backoff](https://developers.google.com/workspace/sheets/api/limits)
 - [Google service-account authentication](https://developers.google.com/identity/protocols/oauth2/service-account)
 - [GitHub scheduled workflow behavior](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#schedule)
+
+## CV fit, separate categories and personal vetting
+
+Internships, Fellowships, Scholarships, Volunteering and Other Opportunities are generated category views. Edit decisions only in Personal Review: Unreviewed, Approve, Hold or Reject. My notes is also human-owned and preserved by stable opportunity ID. Best Opportunities shows up to ten evidence-matched candidates, ordered by the existing priority plus a capped CV-evidence bonus. It is a shortlist to inspect, not a list of verified offers or guaranteed eligible applications.
+
+A Personal Review approval is now required before Weekly Queue entry. Approval never bypasses verified eligibility, official link, deadline, duplicate or workload gates. Hold/Reject suppress queue entries. Profile education should state the current study stage, e.g. first-year undergraduate. Explicit later-stage requirement phrases are flagged; this conservative text screen is not a complete eligibility parser. Update the private Profile education as you progress.
+
+Acceptance probability is explicitly Unknown because a CV does not provide calibrated selection/outcome data. CV fit is shown separately with matching evidence from the private Profile tab. Strong evidence match means at least two evidence items match source keywords, Some means one, and Stretch means none. Neither is an admission likelihood. Source text can contain irrelevant keywords, so review the role itself.
+
+The page source adapter monitors official programme directories (CRY and Bhumi), alongside RSS discovery. Directories and waitlists are leads, not confirmed vacancies. Check a specific current intake, first-year eligibility, funding, location and time commitment before approving. CRY's internship page specifies 5–6 hours daily for at least four weeks; consider vacations or a separate volunteering role. Millennium and Reliance are configured but disabled because their pages fail the bounded parser; manual research leads must be rechecked. Programme text is refreshed, but edited answers and personal review notes are preserved. Personal CV evidence stays in the private Sheet, never in the public repository.

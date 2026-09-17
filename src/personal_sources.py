@@ -40,9 +40,18 @@ def fetch(source: dict) -> list[dict]:
         entries = [{"title": e.get("title", ""), "url": e.get("link", ""),
                     "raw_text": e.get("summary", "") + " " + " ".join(c.get("value", "") for c in e.get("content", []))}
                    for e in feed.entries]
+    elif source["kind"] == "page":
+        soup = BeautifulSoup(bytes(body), "html.parser")
+        for item in soup.select("script, style, nav, footer, header"):
+            item.decompose()
+        content = soup.select_one(source.get("content_selector", "body"))
+        if content is None or len(content.get_text(" ", strip=True)) < 100:
+            raise ValueError("Programme page is empty or selector changed")
+        entries = [{"title": source["title"], "url": source["url"],
+                    "raw_text": "Programme directory: verify a specific current opening before applying. " + content.get_text(" ", strip=True)}]
     elif source["kind"] == "html":
         from urllib.parse import urljoin
-        soup = BeautifulSoup(body, "html.parser")
+        soup = BeautifulSoup(bytes(body), "html.parser")
         entries = []
         for item in soup.select(source["list_selector"]):
             title = item.select_one(source["title_selector"])

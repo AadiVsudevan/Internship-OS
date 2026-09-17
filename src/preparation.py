@@ -4,8 +4,10 @@ No model calls, fabricated accomplishments, or claims about official form questi
 Human answers live in separate columns and are never inputs to generated text.
 """
 from __future__ import annotations
+import re
 
 TYPE_PREP: dict[str, tuple[str, str, str]] = {
+    "Volunteering": ("Why this community and what can you contribute consistently?", "Prepare an outreach example, safeguarding boundaries, realistic weekly availability and one measurable project deliverable.", "Who supervises volunteers and how is community impact assessed?"),
     "Internship": ("Why this role, and what would you learn in your first month?", "Explain how revenue, costs and cash flow differ. Walk through a business you understand.", "What would a strong first four weeks look like?"),
     "Research": ("What question would you investigate, and why does it matter?", "Define a hypothesis, dataset, identification strategy and one confounder. Explain correlation versus causation.", "What methods and supervision would the project provide?"),
     "Fellowship": ("What specific change would you work towards during the fellowship?", "Define the problem, stakeholders, proposed work, milestones and evidence of impact.", "How are fellows supported and evaluated?"),
@@ -25,8 +27,9 @@ def build_pack(record: dict, profile: dict) -> dict:
     category = record["Category"]
     matches = record.get("Matched interests", "")
     interests = matches or ", ".join(profile["interests"][:2])
+    text = (title + " " + record.get("Source excerpt", "")).lower()
     evidence = [e for e in profile.get("evidence", [])
-                if set(e.get("tags", [])) & set(profile["interests"])]
+                if any(re.search(r"\b" + re.escape(t.lower()) + r"\b", text) for t in e.get("tags", []) if t)]
     proof = evidence[0]["text"] if evidence else "Add one real example of relevant work before submitting."
     intro = f"My name is {profile['name']}. {profile['education']} My interests include {interests}."
     motivation = (f"I am interested in {title} as a way to explore {interests} through practical work. "

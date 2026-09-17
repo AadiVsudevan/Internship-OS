@@ -1,5 +1,39 @@
 [
   {
+    "name": "CRY official programmes",
+    "kind": "page",
+    "title": "CRY internships and volunteering programmes",
+    "url": "https://www.cry.org/volunteering-and-internships/",
+    "enabled": true,
+    "primary": true
+  },
+  {
+    "name": "Bhumi official volunteering",
+    "kind": "page",
+    "title": "Bhumi volunteering programmes",
+    "url": "https://www.bhumi.ngo/volunteer",
+    "enabled": true,
+    "primary": true
+  },
+  {
+    "name": "Reliance undergraduate scholarships",
+    "kind": "page",
+    "title": "Reliance Foundation Undergraduate Scholarships",
+    "url": "https://www.scholarships.reliancefoundation.org/UG_Scholarship.aspx",
+    "enabled": false,
+    "primary": true,
+    "disabled_reason": "Official page returns no readable programme text; manual verification required."
+  },
+  {
+    "name": "Millennium Fellowship official programme",
+    "kind": "page",
+    "title": "Millennium Fellowship undergraduate social impact programme",
+    "url": "https://www.millenniumfellows.org/",
+    "enabled": false,
+    "primary": true,
+    "disabled_reason": "Official page exceeds 2 MB ingestion bound; review current intake manually."
+  },
+  {
     "name": "Opportunity Desk",
     "kind": "rss",
     "url": "https://opportunitydesk.org/feed/",

@@ -27,11 +27,14 @@ SCHEMAS = {"Opportunities": AUTO_COLUMNS + HUMAN_COLUMNS,
            "Source Health": HEALTH_COLUMNS, "Run History": AUDIT_COLUMNS,
            "Discovery Inbox": INBOX_COLUMNS, "Application Activity": ACTIVITY_COLUMNS,
            "Profile": ["Key", "Value"]}
+from src.personal_views import REVIEW_COLUMNS, VIEW_CATEGORIES
+SCHEMAS.update({name: REVIEW_COLUMNS for name in ["Personal Review", "Best Opportunities", *VIEW_CATEGORIES]})
+
 TYPE_KEYWORDS = [
     ("Scholarship", r"scholarship|bursary"), ("Exchange", r"exchange"),
     ("Startup Program", r"accelerator|incubator|startup program|start-up program"),
     ("Fellowship", r"fellowship|fellows program"), ("Internship", r"internship|intern\b|summer analyst"),
-    ("Research", r"research|research assistant|phd|postdoc"),
+    ("Volunteering", r"volunteer"), ("Research", r"research|research assistant|phd|postdoc"),
     ("Competition", r"competition|hackathon|challenge|contest"),
     ("Conference", r"conference|summit|symposium"), ("Leadership", r"leadership|leaders|ambassador"),
 ]
@@ -171,7 +174,7 @@ def reconcile(candidates: list[dict], existing: list[dict], profile: dict, now: 
         records[key] = {**old, "ID": key, "Title": title[:500], "Category": category,
                         "Source URL": url, "Source": candidate["source_name"], "Source excerpt": text[:5000],
                         "Deadline candidate": deadline_candidate(text), "Last seen": candidate.get("observed_at", now),
-                        "Last refreshed": now, "Estimated hours": profile["effort_hours"][category],
+                        "Last refreshed": now, "Estimated hours": profile["effort_hours"].get(category, 2),
                         "Possible duplicate": old.get("Possible duplicate", duplicate),
                         "Source authority": "Official source" if candidate.get("primary") else "Aggregator — verify official listing"}
     return [evaluate(r, profile, today) for r in records.values()], new_count
