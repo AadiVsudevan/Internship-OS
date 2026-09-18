@@ -1,6 +1,8 @@
 """Pure record normalization, conservative ranking and budgeted application queue."""
 from __future__ import annotations
 
+from src.geography import in_scope
+
 import hashlib
 import math
 import re
@@ -132,6 +134,9 @@ def evaluate(record: dict, profile: dict, today: date) -> dict:
         blocked = True
         record["Ranking reason"] += "; Not queued: " + (
             "editorial/roundup, not one application" if editorial else "title targets postgraduate study; confirm an exception before overriding")
+    if not in_scope(record, profile):
+        blocked = True
+        record["Ranking reason"] += "; Outside India discovery scope or location unverified"
     official_link = record.get("Verified application URL", "")
     try:
         if official_link:
@@ -157,6 +162,8 @@ def reconcile(candidates: list[dict], existing: list[dict], profile: dict, now: 
     today = date.fromisoformat(now[:10])
     new_count = 0
     for candidate in candidates:
+        if not in_scope(candidate, profile):
+            continue
         url = canonical_url(candidate["url"])
         key = identity(url)
         if key not in records and new_count >= profile["max_new_per_run"]:

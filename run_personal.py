@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 from src.personal_engine import AUTO_COLUMNS, PACK_COLUMNS, INBOX_COLUMNS, ACTIVITY_COLUMNS, build_queues, reconcile, identity
 from src.personal_views import ASSESSMENT_COLUMNS, assess, reviewed_records, snapshots
+from src.geography import in_scope
 from src.activity import transitions, hours_used
 from src.preparation import build_pack
 from src.sheets_store import SheetsClient, SheetsStore
@@ -55,6 +56,7 @@ def sheet_profile(store: SheetsStore) -> dict:
 
 def execute(store: SheetsStore, candidates: list[dict], health: list[dict], profile: dict, now: str) -> dict:
     """Durable stages recover through ID upserts; never commit pre-sync dedupe state."""
+    candidates = [c for c in candidates if in_scope(c, profile)]
     run_id = str(uuid.uuid4())
     failures = sum(h["Status"] != "OK" for h in health)
     audit = {"Run ID": run_id, "At": now, "Result": "FAILED", "Discovered": len(candidates),

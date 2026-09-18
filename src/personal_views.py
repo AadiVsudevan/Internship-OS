@@ -4,6 +4,7 @@ Scores are transparent relevance heuristics, never predicted admission chances.
 """
 from __future__ import annotations
 import re
+from src.geography import in_scope
 
 ASSESSMENT_COLUMNS = ["ID", "Opportunity", "Category", "CV fit", "Acceptance probability",
     "CV evidence", "Stage check", "Vetting checklist", "Priority", "Next action", "Source URL"]
@@ -36,7 +37,7 @@ def assess(record: dict, profile: dict) -> dict:
     checks = "Confirm first-year entry, age, citizenship, location, cost/funding, current intake, workload and a concrete deliverable/mentor."
     if record["Category"] == "Scholarship":
         checks += " Check income, marks, institution/course coverage and whether existing students may apply."
-    return {"ID": record["ID"], "Opportunity": record["Title"], "Category": record["Category"],
+    return {"_in_scope": in_scope(record, profile), "ID": record["ID"], "Opportunity": record["Title"], "Category": record["Category"],
         "CV fit": fit, "Acceptance probability": "Unknown — no calibrated applicant/outcome data",
         "CV evidence": "; ".join(e["id"] + ": " + e["text"] for e in evidence[:3]) or "No matching experience evidenced in CV",
         "Stage check": stage, "Vetting checklist": checks,
@@ -67,7 +68,7 @@ def snapshots(assessments: list[dict], reviews: list[dict]) -> dict[str, list[di
     """Keep all records in category tabs; best opportunities exclude holds and rejects."""
     decisions = {r["ID"]: r for r in reviews}
     rows = [{**a, "My decision": decisions.get(a["ID"], {}).get("My decision", ""),
-             "My notes": decisions.get(a["ID"], {}).get("My notes", "")} for a in assessments]
+             "My notes": decisions.get(a["ID"], {}).get("My notes", "")} for a in assessments if a.get("_in_scope", True)]
     rows.sort(key=lambda r: (-r["Priority"], r["ID"]))
     out = {name: [r for r in rows if r["Category"] in categories] for name, categories in VIEW_CATEGORIES.items()}
     out["Best Opportunities"] = [r for r in rows if r["Next action"] != "No application action"

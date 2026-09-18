@@ -21,7 +21,7 @@ NOW = "2026-09-16T10:00:00+05:30"
 @pytest.fixture
 def profile():
     config = json.loads((Path(__file__).parents[1] / "config/personal.json").read_text())
-    return {**config, "name": "Test Applicant", "education": "I am an undergraduate at Example University.",
+    return {**config, "geography": {"include_global": True}, "name": "Test Applicant", "education": "I am an undergraduate at Example University.",
             "interests": ["economics", "finance", "research", "policy"],
             "evidence": [{"id": "test-project", "text": "I built an Opportunity OS experiment.",
                           "tags": ["research"], "source": "Synthetic test fixture"}]}

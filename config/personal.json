@@ -20,5 +20,32 @@
     "Leadership": 2,
     "Exchange": 3,
     "Other": 2
+  },
+  "geography": {
+    "include_global": false,
+    "india_source_hosts": [
+      "www.cry.org",
+      "cry.org",
+      "www.bhumi.ngo",
+      "bhumi.ngo",
+      "www.scholarships.reliancefoundation.org"
+    ],
+    "location_terms": [
+      "India",
+      "Bengaluru",
+      "Bangalore",
+      "Delhi",
+      "New Delhi",
+      "Delhi NCR",
+      "Mumbai",
+      "Hyderabad",
+      "Chennai",
+      "Pune",
+      "Kolkata",
+      "Sonipat",
+      "Gurugram",
+      "Gurgaon",
+      "Noida"
+    ]
   }
 }
