@@ -44,7 +44,12 @@ def sheet_profile(store: SheetsStore) -> dict:
     """Load identity and evidence from the private Sheet, never public source code."""
     values = {r["Key"]: r.get("Value", "") for r in store.load("Profile")}
     for key in ["interests", "evidence"]:
-        values[key] = json.loads(values.get(key) or "[]")
+        try:
+            values[key] = json.loads(values.get(key) or "[]")
+        except (json.JSONDecodeError, TypeError):
+            raise ValueError(f"Profile tab: {key} must contain a valid JSON list. Fix its Value cell; this is not a GitHub secret error.") from None
+        if not isinstance(values[key], list):
+            raise ValueError(f"Profile tab: {key} must be a JSON list.")
     return {k: v for k, v in values.items() if k in {"name", "education", "interests", "evidence"}}
 
 

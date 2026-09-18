@@ -13,6 +13,7 @@ from typing import Any
 from urllib.parse import quote
 
 from src.personal_engine import SCHEMAS, AUTO_COLUMNS, PACK_COLUMNS
+from src.credentials import CredentialConfigurationError, parse_service_account
 
 
 class SheetsClient:
@@ -26,9 +27,12 @@ class SheetsClient:
             raw = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
             if not raw:
                 raise ValueError("Set GOOGLE_SERVICE_ACCOUNT_JSON in GitHub Secrets; never commit it")
-            info = json.loads(raw)
-            credentials = service_account.Credentials.from_service_account_info(
-                info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
+            info = parse_service_account(raw)
+            try:
+                credentials = service_account.Credentials.from_service_account_info(
+                    info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
+            except (ValueError, TypeError, KeyError):
+                raise CredentialConfigurationError("GOOGLE_SERVICE_ACCOUNT_JSON contains an invalid service-account key. Replace it with the complete downloaded JSON key; do not edit private_key.") from None
             session = AuthorizedSession(credentials)
         self.session = session
 
