@@ -37,3 +37,16 @@ def test_old_global_records_preserved_but_not_queued_or_shown(profile):
     assert build_queues(rows,india(profile),date(2026,9,16))==([],[])
     views=snapshots([assess(rows[0],india(profile))],[])
     assert all(not values for values in views.values())
+
+
+def test_indian_city_title_and_scoped_remote_marketplace(profile):
+    p=india(profile)
+    assert in_scope(candidate(title='Consulting internship, Delhi [Stipend]'),p)
+    p['geography']['india_remote_hosts']=['internshala.com']
+    c=candidate('https://internshala.com/internship/detail/finance-123')
+    c['raw_text']='Location: Work from home. Stipend ₹ 5000 /month'
+    assert in_scope(c,p)
+    c['url']='https://example.org/worldwide'
+    assert not in_scope(c,p)
+    c['url']='https://internshala.com/internship/detail/finance-123';c['raw_text']='Location: London. Stipend £ 500 /month'
+    assert not in_scope(c,p)

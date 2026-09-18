@@ -1,6 +1,6 @@
 {
   "weekly_hours": 3,
-  "max_new_per_run": 30,
+  "max_new_per_run": 70,
   "stale_after_days": 14,
   "timezone": "Asia/Kolkata",
   "weights": {
@@ -28,7 +28,11 @@
       "cry.org",
       "www.bhumi.ngo",
       "bhumi.ngo",
-      "www.scholarships.reliancefoundation.org"
+      "www.scholarships.reliancefoundation.org",
+      "www.teachforindia.org",
+      "www.youthforseva.org",
+      "www.smilefoundationindia.org",
+      "goonj.org"
     ],
     "location_terms": [
       "India",
@@ -45,7 +49,26 @@
       "Sonipat",
       "Gurugram",
       "Gurgaon",
-      "Noida"
+      "Noida",
+      "Ahmedabad",
+      "Jaipur",
+      "Kochi",
+      "Chandigarh",
+      "Indore",
+      "Lucknow",
+      "Coimbatore",
+      "Thane",
+      "Navi Mumbai",
+      "Faridabad",
+      "Ghaziabad",
+      "Kochi",
+      "Patna",
+      "Bhopal",
+      "Surat",
+      "Vadodara"
+    ],
+    "india_remote_hosts": [
+      "internshala.com"
     ]
   }
 }

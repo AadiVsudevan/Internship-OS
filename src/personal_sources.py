@@ -53,13 +53,19 @@ def fetch(source: dict) -> list[dict]:
         from urllib.parse import urljoin
         soup = BeautifulSoup(bytes(body), "html.parser")
         entries = []
-        for item in soup.select(source["list_selector"]):
+        for item in soup.select(source["list_selector"])[:source.get("max_items", 100)]:
             title = item.select_one(source["title_selector"])
             link = item.select_one(source["link_selector"])
             if title and link and link.get("href"):
-                entries.append({"title": title.get_text(" ", strip=True),
+                employer = item.select_one(source["employer_selector"]) if source.get("employer_selector") else None
+                location = item.select_one(source["location_selector"]) if source.get("location_selector") else None
+                label = title.get_text(" ", strip=True) + source.get("title_suffix", "")
+                if employer:
+                    label += " at " + employer.get_text(" ", strip=True)
+                location_text = "Location: " + location.get_text(" ", strip=True) + ". " if location else ""
+                entries.append({"title": label,
                                 "url": urljoin(source["url"], link["href"]),
-                                "raw_text": item.get_text(" ", strip=True)})
+                                "raw_text": location_text + item.get_text(" ", strip=True)})
     else:
         raise ValueError(f"Unsupported source kind: {source['kind']}")
     for entry in entries:

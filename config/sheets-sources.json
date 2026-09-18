@@ -25,28 +25,77 @@
     "disabled_reason": "Official page returns no readable programme text; manual verification required."
   },
   {
-    "name": "Millennium Fellowship official programme",
+    "name": "Internshala finance",
+    "kind": "html",
+    "url": "https://internshala.com/internships/finance-internship/",
+    "enabled": true,
+    "primary": false,
+    "list_selector": ".individual_internship",
+    "title_selector": ".job-title-href",
+    "link_selector": ".job-title-href",
+    "employer_selector": ".company-name",
+    "location_selector": ".locations",
+    "title_suffix": " internship",
+    "max_items": 20
+  },
+  {
+    "name": "Internshala market-research",
+    "kind": "html",
+    "url": "https://internshala.com/internships/market-research-internship/",
+    "enabled": true,
+    "primary": false,
+    "list_selector": ".individual_internship",
+    "title_selector": ".job-title-href",
+    "link_selector": ".job-title-href",
+    "employer_selector": ".company-name",
+    "location_selector": ".locations",
+    "title_suffix": " internship",
+    "max_items": 20
+  },
+  {
+    "name": "Internshala ngo",
+    "kind": "html",
+    "url": "https://internshala.com/internships/ngo-internship/",
+    "enabled": true,
+    "primary": false,
+    "list_selector": ".individual_internship",
+    "title_selector": ".job-title-href",
+    "link_selector": ".job-title-href",
+    "employer_selector": ".company-name",
+    "location_selector": ".locations",
+    "title_suffix": " internship",
+    "max_items": 20
+  },
+  {
+    "name": "Teach For India volunteering",
     "kind": "page",
-    "title": "Millennium Fellowship undergraduate social impact programme",
-    "url": "https://www.millenniumfellows.org/",
-    "enabled": false,
-    "primary": true,
-    "disabled_reason": "Official page exceeds 2 MB ingestion bound; review current intake manually."
+    "title": "Teach For India classroom volunteering",
+    "url": "https://www.teachforindia.org/volunteer",
+    "enabled": true,
+    "primary": true
   },
   {
-    "name": "Opportunity Desk",
-    "kind": "rss",
-    "url": "https://opportunitydesk.org/feed/",
+    "name": "Youth for Seva volunteering",
+    "kind": "page",
+    "title": "Youth for Seva volunteering",
+    "url": "https://www.youthforseva.org/Volunteer",
     "enabled": true,
-    "tags": [],
-    "primary": false
+    "primary": true
   },
   {
-    "name": "Opportunities for Youth",
-    "kind": "rss",
-    "url": "https://opportunitiesforyouth.org/feed/",
+    "name": "Smile Foundation volunteering",
+    "kind": "page",
+    "title": "Smile Foundation volunteering",
+    "url": "https://www.smilefoundationindia.org/volunteer/",
     "enabled": true,
-    "tags": [],
-    "primary": false
+    "primary": true
+  },
+  {
+    "name": "Goonj internships",
+    "kind": "page",
+    "title": "Goonj college social internship programmes",
+    "url": "https://goonj.org/internship/",
+    "enabled": true,
+    "primary": true
   }
 ]

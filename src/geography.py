@@ -19,10 +19,16 @@ def in_scope(record: dict, profile: dict) -> bool:
         return True
     title = record.get('Title', record.get('title', ''))
     text = record.get('Source excerpt', record.get('raw_text', ''))
+    if host in settings.get('india_remote_hosts', []) and re.search(
+            r'location\s*:\s*work from home\b', text, re.I) and re.search(r'₹|\bINR\b', text):
+        return True
     places = settings.get('location_terms', ['India'])
     terms = '|'.join(re.escape(p) for p in places)
     if not terms:
         return False
+    cities = [p for p in places if p.lower() != 'india']
+    if cities and re.search(r'\b(?:' + '|'.join(re.escape(p) for p in cities) + r')\b', title, re.I):
+        return True
     # Avoid treating Indian nationality as evidence of an Indian work location.
     pattern = rf'\b(?:in|at|based in|location\s*[:\-]|locations\s*[:\-])\s*(?:{terms})\b'
     if re.search(pattern, title, re.I):
